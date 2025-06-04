@@ -1,0 +1,13 @@
+Basic Understanding about:
+    1. Tween
+        -- gsap.to()
+        -- gsap.from()
+        -- gsap.fromTo() 
+    2. Time Line
+        -- gsap.timeline()
+    3. Sequencing
+    4. Positioning
+        -- Lebel (.add(), .addLebel(), .seek()) 
+    5. Effect()
+    6. RegisterEffect()
+    7. GlobalTimeline 

@@ -1,0 +1,32 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100svh;
+    padding: 20px;
+    background-color: #0f0f0f;
+}
+
+.box {
+    width: 100px;
+    height: 100px;
+    background-color: red;
+    border-radius: 10px;
+    margin-bottom: 30px;
+}
+
+.b-2 {
+    background-color: #fff;
+    /* margin-left: 50px; */
+}
+
+.b-3 {
+    background-color: blue;
+}

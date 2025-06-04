@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GSAP</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <section class="container">
+        <div class="boxes">
+            <div class="box b-1" id="red">
+
+            </div>
+            <div class="box b-2" id="white">
+
+            </div>
+            <div class="box b-3" id="blue">
+
+            </div>
+        </div>
+
+    </section>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+    <script>
+        // use a class or ID
+        // gsap.to(".box", {
+        //     rotation: 45, //Rotate: 45deg
+        //     // x: 550, //Transform: translateX(50px)
+        //     duration: 3 //Transition: 3s
+        // });
+
+
+        //all tweens run in direct succession this is time line
+        let tl = gsap.timeline();
+        // tl.to("#red", { duration: 1, x: 550 })
+        //     .to("#white", { duration: 2, x: 550 })
+        //     .to("#blue", { duration: 1, x: 550 })
+
+        // Sequincing
+        //sequenced one-after-the-other
+        // tl.to(".b-1", { duration: 2, x: 100 }) //notice that there's no semicolon!
+        //     .to(".b-2", { duration: .5, x: "-200" })
+        //     .to(".b-3", { duration: 3, x: 50, rotation: 360 });
+
+        //Positioning
+        tl.to(".b-1", { duration: 2, x: 100 }, .5) //notice that there's no semicolon!
+        //add blueSpin label 1 second after end of timeline
+        // .add("blueSpin", "+=1") // add lebel
+        // .to(".b-2", { duration: 1, x: "-200" })
+        // .to(".b-3", { duration: 3, x: 50, rotation: 360 });
+
+        // tl.to(".b-1", { duration: 4, x: 100 }) //notice that there's no semicolon!
+        //     .pause(4)
+        //     .to(".b-2", { duration: 1, x: "-200" })
+        //     .play()
+        //     .to(".b-3", { duration: 3, x: 50, rotation: 360 });
+
+        //you only need to create a variable if you want to control it later...
+        var tween = gsap.to(".b-2", { duration: .5, x: "-200" });
+        // var tl = gsap.timeline(); //"tl" short for timeline
+        tl.to(".b-1", { duration: 2, x: 100 }) //notice that there's no semicolon!
+            .to(".b-2", { duration: 1, x: "-200" })
+            .to(".b-3", { duration: 3, x: 50, rotation: 360 });
+
+        //now we can control them...
+        tween.pause();
+        // tween.timeScale(2); //double speed
+        tween.play();
+        // tl.seek(3); //jump to 3 seconds in
+        // tl.progress(0.5); //halfway through
+
+    </script>
+</body>
+
+
+</html>
