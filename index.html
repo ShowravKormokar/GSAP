@@ -9,6 +9,33 @@
 </head>
 
 <body>
+    <header>
+        <div class="nav">
+           <div class="logo">
+            <span>GSAP</span>
+        </div>
+        <div class="links">
+            <a href="#" class="link">HOME</a>
+            <a href="#" class="link">DOCS</a>
+            <a href="#" class="link">ABOUT</a>
+            <a href="#" class="link">POLICIES</a>
+        </div> 
+        </div>
+    </header>
+    <div class="title">
+        <h3>Lorem ipsum dolor sit amet consectetur </h3>
+        <div class="contents">
+            <p>
+                <span>
+                    Lorem ipsum dolor sit amet
+                </span>
+                <span>
+                    consectetur, adipisicing elit. In, eius.
+                </span>
+            </p>
+            <!-- <h4>Let's Go</h4> -->
+        </div>
+    </div>
     <section class="container">
         <div class="boxes">
             <div class="box b-1" id="red">
@@ -21,8 +48,15 @@
 
             </div>
         </div>
-
     </section>
+
+    <!-- <section>
+        <div class="contents">
+            <h1>Hello, I am Showrav</h1>
+            <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. In, eius.</p>
+            <h4>Let's Go</h4>
+        </div>
+    </section> -->
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
     <script>
         // use a class or ID
@@ -34,7 +68,7 @@
 
 
         //all tweens run in direct succession this is time line
-        let tl = gsap.timeline();
+        // let tl = gsap.timeline();
         // tl.to("#red", { duration: 1, x: 550 })
         //     .to("#white", { duration: 2, x: 550 })
         //     .to("#blue", { duration: 1, x: 550 })
@@ -43,10 +77,10 @@
         //sequenced one-after-the-other
         // tl.to(".b-1", { duration: 2, x: 100 }) //notice that there's no semicolon!
         //     .to(".b-2", { duration: .5, x: "-200" })
-        //     .to(".b-3", { duration: 3, x: 50, rotation: 360 });
+        //     .to(".b-3", { duration: 3, x: 50, rotation: 360, repeat: -1, yoyo: true });
 
         //Positioning
-        tl.to(".b-1", { duration: 2, x: 100 }, .5) //notice that there's no semicolon!
+        // tl.to(".b-1", { duration: 2, x: 100 }, .5) //notice that there's no semicolon!
         //add blueSpin label 1 second after end of timeline
         // .add("blueSpin", "+=1") // add lebel
         // .to(".b-2", { duration: 1, x: "-200" })
@@ -59,20 +93,29 @@
         //     .to(".b-3", { duration: 3, x: 50, rotation: 360 });
 
         //you only need to create a variable if you want to control it later...
-        var tween = gsap.to(".b-2", { duration: .5, x: "-200" });
+        // var tween = gsap.to(".b-2", { duration: .5, x: "-200" });
         // var tl = gsap.timeline(); //"tl" short for timeline
-        tl.to(".b-1", { duration: 2, x: 100 }) //notice that there's no semicolon!
-            .to(".b-2", { duration: 1, x: "-200" })
-            .to(".b-3", { duration: 3, x: 50, rotation: 360 });
+        // tl.to(".b-1", { duration: 2, x: 100 }) //notice that there's no semicolon!
+        //     .to(".b-2", { duration: 1, x: "-200" })
+        //     .to(".b-3", { duration: 3, x: 50, rotation: 360 });
 
         //now we can control them...
-        tween.pause();
+        // tween.pause();
         // tween.timeScale(2); //double speed
-        tween.play();
+        // tween.play();
         // tl.seek(3); //jump to 3 seconds in
         // tl.progress(0.5); //halfway through
 
+        // gsap.from("h1,p,h4", {
+        //     opacity: 0,
+        //     y: 30,
+        //     duration: 2,
+        //     delay: 1,
+        //     stagger: 1 //This means one by one like h1>p>h4
+        // })
+
     </script>
+    <script src="script.js"></script>
 </body>
 
 
