@@ -1,0 +1,56 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: monospace, sans-serif;
+    /* background-color: #0f0f0f; */
+    /* color: #fff; */
+    overflow-x: hidden;
+}
+
+
+/* --------- Header/Navbar Style */
+header{
+    width: 100%;
+    height: auto;
+}
+
+nav{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 60px;
+}
+
+.logo{
+    font-size: 26px;
+    font-weight: 700;
+}
+
+.nav-links{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 28px;
+}
+
+.nav-links a{
+    text-decoration: none;
+    font-size: 16px;
+    color: black;
+    cursor: pointer;
+}
+
+.nav-links button{
+    font-size: 14px;
+    font-weight: 600;
+    color: black;
+    background-color: transparent;
+    border: 1px solid #000;
+    border-radius: 5px;
+    padding: 12px 14px;
+    cursor: pointer;
+}
