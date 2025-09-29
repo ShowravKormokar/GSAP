@@ -9,7 +9,7 @@ document.querySelectorAll(".card").forEach((card) => {
       start: "top 10vh",
       end: "bottom 15%",
       scrub: true,
-      markers: true,
+      // markers: true,
     },
   });
 });

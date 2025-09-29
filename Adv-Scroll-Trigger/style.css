@@ -1,44 +1,86 @@
 * {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-    /* overflow-x: hidden; */
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  /* overflow-x: hidden; */
 }
 
 html,
 body {
-    font-family: 'Nunito', sans-serif;
-    width: 100%;
-    /* height: 100%; */
-    background-color: black;
+  font-family: "Nunito", sans-serif;
+  width: 100%;
+  /* height: 100%; */
+  background-color: black;
 }
 
-main {  
-    padding: 5rem;
-    display: flex;
-    flex-direction: column;
-    /* justify-content: center; */
-    align-items: center;
-    gap: 5rem;
-    color: white;
-    width: 100%;
-    text-align: center;
+header {
+  position: fixed;
+  top: 90%;
+  left: 2%;
+  padding: 5px 10px;
+  margin: 5px;
+  color: #a27e58;
+  font-size: 1rem;
+  z-index: 1;
+
+  backdrop-filter: blur(5px) saturate(100%);
+  -webkit-backdrop-filter: blur(5px) saturate(100%);
+  background-color: rgba(46, 37, 30, 0.55);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.125);
+}
+
+header a:hover {
+  color: #b6977b;
+  text-decoration: underline;
+}
+
+main {
+  padding: 5rem;
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: center;
+  gap: 7rem;
+  color: white;
+  width: 100%;
+  text-align: center;
 }
 
 .card {
-    position: sticky;
-    top: 10vh;
-    background-color: #2e251e;
-    width: 27vw;
-    padding: 15vh 20px;
-    border-radius: 10px;
-    gap: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  position: sticky;
+  top: 10vh;
+  background-color: #2e251e;
+  width: 27vw;
+  padding: 15vh 20px;
+  border-radius: 10px;
+  gap: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 img {
-    width: 180px;
-    aspect-ratio: square;
+  width: 180px;
+  aspect-ratio: square;
+}
+
+h1 {
+  text-transform: uppercase;
+}
+
+@media (max-width: 967px) {
+  header {
+    top: 1%;
+    font-size: 0.7rem;
+  }
+
+  main {
+    padding: 10rem 2rem 10rem 2rem;
+  }
+
+  .card {
+    width: 100%;
+    top: 10%;
+  }
 }
