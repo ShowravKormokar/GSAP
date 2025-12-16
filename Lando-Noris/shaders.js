@@ -11,7 +11,6 @@ const fluidFragmentShader = `
 uniform sampler2D uPrevTrails;
 uniform vec2 uMouse;
 uniform vec2 uPrevMouse;
-uniform vec2 uResolution;
 uniform float uDecay;
 uniform bool uIsMoving;
 
@@ -36,8 +35,8 @@ void main() {
             vec2 closestPoint = uPrevMouse + projAlong * mouseDir;
             float dist = length(vUv - closestPoint);
 
-            float lineWidth = 0.09;
-            float intensity = smoothstep(lineWidth, 0.0, dist) * 0.3;
+            float lineWidth = 0.1;
+            float intensity = smoothstep(lineWidth, 0.0, dist) * 0.9;
 
             newValue += intensity;
         }
@@ -45,6 +44,7 @@ void main() {
     
     gl_FragColor = vec4(newValue, 0.0, 0.0, 1.0);
 }
+
 `;
 
 const displayFragmentShader = `
@@ -52,11 +52,9 @@ uniform sampler2D uFluid;
 uniform sampler2D uTopTexture;
 uniform sampler2D uBottomTexture;
 uniform vec2 uResolution;
-uniform float uDpr;
 uniform vec2 uTopTextureSize;
 uniform vec2 uBottomTextureSize;
 uniform vec2 uParallax;
-
 
 varying vec2 vUv;
 
@@ -76,35 +74,23 @@ vec2 getCoverUV(vec2 uv, vec2 textureSize) {
 }
 
 void main() {
-    // Sample fluid simulation data
-    float fluid = texture2D(uFluid, vUv).r;
-    
-    // Calculate UV coordinates for cover-style texture mapping
-    //vec2 topUV = getCoverUV(vUv, uTopTextureSize);
-    //vec2 bottomUV = getCoverUV(vUv, uBottomTextureSize);
-    vec2 parallax = uParallax * 0.03; // very small
+    float mask = texture2D(uFluid, vUv).r;
 
-    vec2 bottomUV = getCoverUV(vUv - parallax * 0.6, uBottomTextureSize);
-    vec2 topUV = getCoverUV(vUv - parallax, uTopTextureSize);
+    // boost low values (important for black images)
+    mask = pow(mask, 0.5);
+    mask = clamp(mask, 0.0, 1.0);
 
-    
-    // Sample textures
-    vec4 topColor = texture2D(uTopTexture, topUV);
-    vec4 bottomColor = texture2D(uBottomTexture, bottomUV);
-    
-    // Define transition parameters
-    float threshold = 0.02;
-    float edgeWidth = 0.004 / uDpr;
-    
-    // Calculate smooth transition factor
-    // float t = 1.0 - smoothstep(threshold, threshold + edgeWidth, fluid);
-    float t = smoothstep(threshold, threshold + edgeWidth, fluid);
+    float t = 1.0 - mask;
 
-    // Mix between top and bottom textures based on fluid value
-    vec4 finalColor = mix(topColor, bottomColor, t);
-    
-    // Output final color
-    gl_FragColor = finalColor;
+    vec2 p = uParallax * 0.04;
+
+    vec2 uvTop = getCoverUV(vUv - p, uTopTextureSize);
+    vec2 uvBot = getCoverUV(vUv - p * 0.6, uBottomTextureSize);
+
+    vec4 top = texture2D(uTopTexture, uvTop);
+    vec4 bot = texture2D(uBottomTexture, uvBot);
+
+    gl_FragColor = top * t + bot * (1.0 - t);
 }
 `;
 

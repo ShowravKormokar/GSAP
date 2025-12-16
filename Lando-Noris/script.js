@@ -80,8 +80,8 @@ function init() {
     });
 
     // Add images here
-    loadImage("./top.png", topTexture, topTextureSize);
-    loadImage("./bb.png", bottomTexture, bottomTextureSize);
+    loadImage("./topOO.png", topTexture, topTextureSize);
+    loadImage("./bottomO.png", bottomTexture, bottomTextureSize);
 
     const planeGeometry = new THREE.PlaneGeometry(2, 2);
     const displayMesh = new THREE.Mesh(planeGeometry, displayMaterial);
