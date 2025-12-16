@@ -7,25 +7,32 @@ import {
 } from './shaders.js';
 
 window.addEventListener("load", init);
+
 function init() {
+
     const canvas = document.querySelector("canvas");
+
     const renderer = new THREE.WebGLRenderer({
         canvas,
         antialias: true,
         precision: "highp"
     });
+
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
     const scene = new THREE.Scene();
     const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
 
     const mouse = new THREE.Vector2(0.5, 0.5);
     const prevMouse = new THREE.Vector2(0.5, 0.5);
+
     let isMoving = false;
     let lastMoveTime = 0;
-    let mouseInCanvas = false;
+    let lastUserInputTime = performance.now();
 
     const size = 500;
+
     const pingPongTargets = [
         new THREE.WebGLRenderTarget(size, size, {
             minFilter: THREE.LinearFilter,
@@ -40,13 +47,59 @@ function init() {
             type: THREE.FloatType,
         }),
     ];
+
     let currentTarget = 0;
 
     const topTexture = createPlaceholderTexture("#0000ff");
     const bottomTexture = createPlaceholderTexture("#ff0000");
+
     const topTextureSize = new THREE.Vector2(1, 1);
     const bottomTextureSize = new THREE.Vector2(1, 1);
+
     const parallax = new THREE.Vector2(0, 0);
+
+    // ===============================
+    // AUTO RANDOM REVEAL
+    // ===============================
+
+    const clock = new THREE.Clock();
+
+    let autoMouse = {
+        x: Math.random(),
+        y: Math.random(),
+    };
+
+    let autoTarget = {
+        x: Math.random(),
+        y: Math.random(),
+    };
+
+    let autoTimer = 0;
+
+    function updateAutoReveal(delta) {
+
+        // ⛔ DO NOTHING if user moved mouse recently
+        if (performance.now() - lastUserInputTime < 300) return;
+
+        autoTimer += delta;
+
+        if (autoTimer > 1.2) {
+            autoTimer = 0;
+            autoTarget.x = Math.random();
+            autoTarget.y = Math.random();
+        }
+
+        autoMouse.x += (autoTarget.x - autoMouse.x) * 0.05;
+        autoMouse.y += (autoTarget.y - autoMouse.y) * 0.05;
+
+        trailsMaterial.uniforms.uMouse.value.set(autoMouse.x, autoMouse.y);
+        trailsMaterial.uniforms.uIsMoving.value = true;
+    }
+
+
+    // ===============================
+    // MATERIALS
+    // ===============================
 
     const trailsMaterial = new THREE.ShaderMaterial({
         uniforms: {
@@ -59,7 +112,6 @@ function init() {
         },
         vertexShader,
         fragmentShader: fluidFragmentShader,
-
     });
 
     const displayMaterial = new THREE.ShaderMaterial({
@@ -67,9 +119,7 @@ function init() {
             uFluid: { value: null },
             uTopTexture: { value: topTexture },
             uBottomTexture: { value: bottomTexture },
-            uResolution: {
-                value: new THREE.Vector2(window.innerWidth, window.innerHeight),
-            },
+            uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
             uDpr: { value: window.devicePixelRatio },
             uTopTextureSize: { value: topTextureSize },
             uBottomTextureSize: { value: bottomTextureSize },
@@ -79,9 +129,16 @@ function init() {
         fragmentShader: displayFragmentShader,
     });
 
-    // Add images here
+    // ===============================
+    // LOAD IMAGES
+    // ===============================
+
     loadImage("./topOO.png", topTexture, topTextureSize);
     loadImage("./bottomO.png", bottomTexture, bottomTextureSize);
+
+    // ===============================
+    // SCENE SETUP
+    // ===============================
 
     const planeGeometry = new THREE.PlaneGeometry(2, 2);
     const displayMesh = new THREE.Mesh(planeGeometry, displayMaterial);
@@ -103,158 +160,117 @@ function init() {
 
     animate();
 
+    // ===============================
+    // HELPERS
+    // ===============================
+
     function createPlaceholderTexture(color) {
-        const canvas = document.createElement("canvas");
-        canvas.width = 512;
-        canvas.height = 512;
-        const ctx = canvas.getContext("2d");
+        const c = document.createElement("canvas");
+        c.width = 512;
+        c.height = 512;
+        const ctx = c.getContext("2d");
         ctx.fillStyle = color;
         ctx.fillRect(0, 0, 512, 512);
-
-        const texture = new THREE.CanvasTexture(canvas);
-        texture.minFilter = THREE.LinearFilter;
-        return texture;
+        return new THREE.CanvasTexture(c);
     }
 
-    function loadImage(url, torgetTexture, textureSizeVector) {
+    function loadImage(url, targetTexture, textureSizeVector) {
         const img = new Image();
-        img.crossOrigin = "Anonymous";
+        img.crossOrigin = "anonymous";
 
-        img.onload = function () {
-            const originalWidth = img.width;
-            const originalHeight = img.height;
-            textureSizeVector.set(originalWidth, originalHeight);
-
-            console.log(`Loaded texture: ${url}, size: ${originalWidth}x${originalHeight}`);
-
-            const maxSize = 4096;
-            let newWidth = originalWidth;
-            let newHeight = originalHeight;
-
-            if (originalWidth > maxSize | originalHeight > maxSize) {
-                console.log(`Image exceeds max texture size, resizing ... `);
-                if (originalWidth > originalHeight) {
-                    newWidth = maxSize;
-                    newHeight = Math.floor(originalHeight * (maxSize / originalWidth));
-                } else {
-                    newHeight = maxSize;
-                    newWidth = Math.floor(originalWidth * (maxSize / originalHeight));
-                }
-            }
+        img.onload = () => {
+            textureSizeVector.set(img.width, img.height);
 
             const canvas = document.createElement("canvas");
-            canvas.width = newWidth;
-            canvas.height = newHeight;
-            const ctx = canvas.getContext("2d");
-            ctx.drawImage(img, 0, 0, newWidth, newHeight);
+            canvas.width = img.width;
+            canvas.height = img.height;
 
-            const newTexture = new THREE.CanvasTexture(canvas);
-            newTexture.minFilter = THREE.LinearFilter;
-            newTexture.magFilter = THREE.LinearFilter;
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0);
+
+            const tex = new THREE.CanvasTexture(canvas);
+            tex.minFilter = THREE.LinearFilter;
+            tex.magFilter = THREE.LinearFilter;
 
             if (url.includes("top")) {
-                displayMaterial.uniforms.uTopTexture.value = newTexture;
+                displayMaterial.uniforms.uTopTexture.value = tex;
             } else {
-                displayMaterial.uniforms.uBottomTexture.value = newTexture;
+                displayMaterial.uniforms.uBottomTexture.value = tex;
             }
-        };
-
-        img.onerror = function (err) {
-            console.error(`Failed to load image: ${url}`, err);
         };
 
         img.src = url;
-
     }
 
-    function onMouseMove(event) {
-        const canvasRect = canvas.getBoundingClientRect();
-        if (
-            event.clientX >= canvasRect.left &&
-            event.clientX <= canvasRect.right &&
-            event.clientY >= canvasRect.top &&
-            event.clientY <= canvasRect.bottom
-        ) {
-            prevMouse.copy(mouse);
+    function onMouseMove(e) {
+        lastUserInputTime = performance.now();
 
-            mouse.x = (event.clientX - canvasRect.left) / canvasRect.width;
-            mouse.y = 1 - (event.clientY - canvasRect.top) / canvasRect.height;
+        const r = canvas.getBoundingClientRect();
+        if (e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) return;
 
-            const px = mouse.x - 0.5;
-            const py = mouse.y - 0.5;
+        prevMouse.copy(mouse);
+        mouse.x = (e.clientX - r.left) / r.width;
+        mouse.y = 1 - (e.clientY - r.top) / r.height;
 
-            // smooth + opposite direction
-            parallax.x += (-px - parallax.x) * 0.08;
-            parallax.y += (-py - parallax.y) * 0.08;
+        const px = mouse.x - 0.5;
+        const py = mouse.y - 0.5;
 
-            isMoving = true;
+        parallax.x += (-px - parallax.x) * 0.08;
+        parallax.y += (-py - parallax.y) * 0.08;
 
-            lastMoveTime = performance.now();
-        } else {
-            isMoving = false;
-        }
+        isMoving = true;
+        lastMoveTime = performance.now();
     }
-    //missing one line 192 21:10
-    function onTouchMove(event) {
-        if (event.touches.length > 0) {
-            event.preventDefault();
 
-            const canvasRect = canvas.getBoundingClientRect();
-            const touchX = event.touches[0].clientX;
-            const touchY = event.touches[0].clientY;
+    function onTouchMove(e) {
+        if (!e.touches.length) return;
+        e.preventDefault();
 
-            if (
-                touchX >= canvasRect.left &&
-                touchX <= canvasRect.right &&
-                touchY >= canvasRect.top &&
-                touchY <= canvasRect.bottom
-            ) {
-                prevMouse.copy(mouse);
+        const r = canvas.getBoundingClientRect();
+        prevMouse.copy(mouse);
 
-                mouse.x = (touchX - canvasRect.left) / canvasRect.width;
-                mouse.y = 1 - (touchY - canvasRect.top) / canvasRect.height;
+        mouse.x = (e.touches[0].clientX - r.left) / r.width;
+        mouse.y = 1 - (e.touches[0].clientY - r.top) / r.height;
 
-                isMoving = true;
-                lastMoveTime = performance.now();
-            } else {
-                isMoving = false;
-            }
-        }
+        isMoving = true;
+        lastMoveTime = performance.now();
     }
 
     function onWindowResize() {
         renderer.setSize(window.innerWidth, window.innerHeight);
-
-        displayMaterial.uniforms.uResolution.value.set(
-            window.innerWidth,
-            window.innerHeight
-        );
+        displayMaterial.uniforms.uResolution.value.set(window.innerWidth, window.innerHeight);
         displayMaterial.uniforms.uDpr.value = window.devicePixelRatio;
     }
 
+    // ===============================
+    // ANIMATE
+    // ===============================
+
     function animate() {
         requestAnimationFrame(animate);
+
         parallax.multiplyScalar(0.97);
+
+        const delta = clock.getDelta();
+        updateAutoReveal(delta);
 
         if (isMoving && performance.now() - lastMoveTime > 50) {
             isMoving = false;
         }
+
         const prevTarget = pingPongTargets[currentTarget];
         currentTarget = (currentTarget + 1) % 2;
-        const currentRenderTarget = pingPongTargets[currentTarget];
 
         trailsMaterial.uniforms.uPrevTrails.value = prevTarget.texture;
-        trailsMaterial.uniforms.uMouse.value.copy(mouse);
         trailsMaterial.uniforms.uPrevMouse.value.copy(prevMouse);
         trailsMaterial.uniforms.uIsMoving.value = isMoving;
 
-        renderer.setRenderTarget(currentRenderTarget);
+        renderer.setRenderTarget(pingPongTargets[currentTarget]);
         renderer.render(simScene, camera);
 
-        displayMaterial.uniforms.uFluid.value = currentRenderTarget.texture;
+        displayMaterial.uniforms.uFluid.value = pingPongTargets[currentTarget].texture;
 
         renderer.setRenderTarget(null);
         renderer.render(scene, camera);
     }
-
 }
