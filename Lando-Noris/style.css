@@ -81,3 +81,21 @@ canvas {
     font-size: 0.8rem;
     /* opacity: 0.7; */
 }
+
+@media (max-width: 600px) {
+
+    canvas {
+        background-size: cover;
+        background-position: center;
+    }
+    .h-footer {
+        color: aliceblue;
+        flex-direction: column;
+        gap: 5px;
+        bottom: 10px;
+    }
+    
+    .h-footer .sec-p {
+        text-align: center;
+    }
+}

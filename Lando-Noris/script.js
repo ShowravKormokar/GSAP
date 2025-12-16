@@ -107,7 +107,7 @@ function init() {
             uMouse: { value: mouse },
             uPrevMouse: { value: prevMouse },
             uResolution: { value: new THREE.Vector2(size, size) },
-            uDecay: { value: 0.9 },
+            uDecay: { value: 0.935 },
             uIsMoving: { value: false },
         },
         vertexShader,
