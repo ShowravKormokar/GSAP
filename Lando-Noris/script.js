@@ -81,7 +81,7 @@ function init() {
 
     // Add images here
     loadImage("./top.png", topTexture, topTextureSize);
-    loadImage("./bottom.png", bottomTexture, bottomTextureSize);
+    loadImage("./bb.png", bottomTexture, bottomTextureSize);
 
     const planeGeometry = new THREE.PlaneGeometry(2, 2);
     const displayMesh = new THREE.Mesh(planeGeometry, displayMaterial);
@@ -234,7 +234,7 @@ function init() {
 
     function animate() {
         requestAnimationFrame(animate);
-        parallax.multiplyScalar(0.92);
+        parallax.multiplyScalar(0.97);
 
         if (isMoving && performance.now() - lastMoveTime > 50) {
             isMoving = false;

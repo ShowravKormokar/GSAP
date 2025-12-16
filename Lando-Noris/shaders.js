@@ -97,7 +97,7 @@ void main() {
     float edgeWidth = 0.004 / uDpr;
     
     // Calculate smooth transition factor
-    //float t = 1.0 - smoothstep(threshold, threshold + edgeWidth, fluid);
+    // float t = 1.0 - smoothstep(threshold, threshold + edgeWidth, fluid);
     float t = smoothstep(threshold, threshold + edgeWidth, fluid);
 
     // Mix between top and bottom textures based on fluid value

@@ -3,9 +3,37 @@
     padding: 0;
     box-sizing: border-box;
 }
+nav{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 10;
+    backdrop-filter: blur(10px);
+}
 
-body {
-    font-family: 'Poppins', sans-serif;
+.btn{
+    font-family: "DM Mono", monospace;
+    padding: 0.5rem 1rem;
+    background: black;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+nav .logo{
+    font-family: "Righteous", cursive;
+    font-size: 1rem;
+    line-height: 0.75;
+    text-transform: uppercase;
+    font-weight: bold;
 }
 
 .hero {
