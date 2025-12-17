@@ -55,6 +55,12 @@ canvas {
     z-index: 1;
 }
 
+canvas {
+    touch-action: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+}
+
 .h-footer {
     position: absolute;
     bottom: 20px;

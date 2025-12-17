@@ -27,6 +27,9 @@ function init() {
     const mouse = new THREE.Vector2(0.5, 0.5);
     const prevMouse = new THREE.Vector2(0.5, 0.5);
 
+    const isMobile = 'ontouchstart' in window;
+    const AUTO_IDLE_DELAY = isMobile ? 700 : 300;
+
     let isMoving = false;
     let lastMoveTime = 0;
     let lastUserInputTime = performance.now();
@@ -79,7 +82,7 @@ function init() {
     function updateAutoReveal(delta) {
 
         // ⛔ DO NOTHING if user moved mouse recently
-        if (performance.now() - lastUserInputTime < 300) return;
+        if (performance.now() - lastUserInputTime < AUTO_IDLE_DELAY) return;
 
         autoTimer += delta;
 
@@ -156,6 +159,9 @@ function init() {
 
     window.addEventListener("mousemove", onMouseMove);
     window.addEventListener("touchmove", onTouchMove, { passive: false });
+    window.addEventListener("touchstart", onTouchMove, { passive: false });
+    window.addEventListener("touchmove", onTouchMove, { passive: false });
+
     window.addEventListener("resize", onWindowResize);
 
     animate();
@@ -222,15 +228,20 @@ function init() {
         lastMoveTime = performance.now();
     }
 
-    function onTouchMove(e) {
-        if (!e.touches.length) return;
-        e.preventDefault();
+    function onTouchMove(event) {
+        event.preventDefault();
 
-        const r = canvas.getBoundingClientRect();
+        const touch = event.touches[0];
+        if (!touch) return;
+
+        lastUserInputTime = performance.now(); // VERY IMPORTANT
+
+        const rect = canvas.getBoundingClientRect();
+
         prevMouse.copy(mouse);
 
-        mouse.x = (e.touches[0].clientX - r.left) / r.width;
-        mouse.y = 1 - (e.touches[0].clientY - r.top) / r.height;
+        mouse.x = (touch.clientX - rect.left) / rect.width;
+        mouse.y = 1 - (touch.clientY - rect.top) / rect.height;
 
         isMoving = true;
         lastMoveTime = performance.now();
