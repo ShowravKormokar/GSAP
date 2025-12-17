@@ -90,7 +90,8 @@ void main() {
     vec4 top = texture2D(uTopTexture, uvTop);
     vec4 bot = texture2D(uBottomTexture, uvBot);
 
-    gl_FragColor = top * t + bot * (1.0 - t);
+    gl_FragColor = top * t + bot * (1.05 - t);
+    // gl_FragColor = mix(top, bot, smoothstep(0.9, 0.10, 1.0 - t));//Reverse 2nd img to 1st image
 }
 `;
 
