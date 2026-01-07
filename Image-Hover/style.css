@@ -1,0 +1,75 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+section {
+    position: relative;
+    width: 100vw;
+    height: 100svh;
+    background-color: #0f0f0f;
+    color: #e3e3db;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 2.5em;
+    overflow: hidden;
+}
+
+.profile-images {
+    padding: 0 2rem;
+    width: max-content;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.img {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    padding: 5px;
+    cursor: pointer;
+    will-change: width, height;
+}
+
+.profile-names {
+    width: 100%;
+    height: 10rem;
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+    overflow: hidden;
+}
+
+.name h1 {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 10rem;
+    font-weight: 900;
+    letter-spacing: -0.5rem;
+    line-height: 1;
+    color: #8b5cf6;
+    user-select: none;
+    -webkit-user-select: none;
+    transform: translateY(100%);
+}
+
+.name.default h1 {
+    color: #fff;
+    transform: translateY(-100%);
+}
+
+.name h1 .letter {
+    position: relative;
+    transform: translateY(0%);
+    will-change: transform;
+}
