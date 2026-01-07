@@ -6,6 +6,7 @@
 
 body {
     background-color: #e3e3db;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
 }
 
 img {
@@ -14,6 +15,7 @@ img {
     height: 100%;
     object-fit: cover;
     will-change: transform;
+    border-radius: 8px;
 }
 
 h1 {
@@ -28,17 +30,18 @@ p {
     text-transform: uppercase;
     font-size: 1.5rem;
     font-weight: 700;
+    padding: 40px;
 }
 
 section {
     position: relative;
     width: 100vw;
-    height: 100vh;
     overflow: hidden;
 }
 
 .intro,
 .outro {
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -47,19 +50,18 @@ section {
 .awards {
     min-height: 100vh;
     height: max-content;
-}
-
-.awards p {
-    padding: 5px 20px;
+    padding-bottom: 100px;
 }
 
 .awards-list {
     border-top: 1px solid #000;
+    width: 100%;
 }
 
 .award {
     height: 80px;
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    position: relative;
+    overflow: hidden;
 }
 
 .award-wrapper {
@@ -76,9 +78,10 @@ section {
     justify-content: space-between;
     align-items: center;
     height: 80px;
-    padding: 5px 15px;
+    padding: 5px 20px;
     cursor: pointer;
     border-bottom: 1px solid #000;
+    transition: background-color 0.3s ease;
 }
 
 .award-name {
@@ -91,11 +94,21 @@ section {
     color: #e3e3db;
 }
 
+.award h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    text-transform: uppercase;
+}
+
 .award-preview {
     position: fixed;
     bottom: 15px;
     right: 15px;
-    width: 30%;
-    height: 30%;
+    width: 300px;
+    height: 200px;
     z-index: 2;
+    pointer-events: none;
+    border-radius: 8px;
+    overflow: hidden;
 }
